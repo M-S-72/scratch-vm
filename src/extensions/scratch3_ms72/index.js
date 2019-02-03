@@ -1,176 +1,78 @@
-var MS72 = function (runtimeProxy) {
+const ArgumentType = require('../../extension-support/argument-type');
+const BlockType = require('../../extension-support/block-type');
+const formatMessage = require('format-message');
+const MathUtil = require('../../util/math-util');
+
+class Scratch3MS72Blocks {
+    constructor (runtime) {
+        /**
+         * The runtime instantiating this block package.
+         * @type {Runtime}
+         */
+        this.runtime = runtime;
+    }
     /**
-     * A proxy to communicate with the Scratch 3.0 runtime across a worker boundary.
-     * @type {Runtime}
+     * @returns {object} metadata for this extension and its blocks.
      */
-    this.runtime = runtimeProxy;
-};
-
-/**
- * @return {object} This extension's metadata.
- */
-MS72.prototype.getInfo = function () {
-    return {
-        // Required: the machine-readable name of this extension.
-        // Will be used as the extension's namespace.
-        id: 'ms72',
-
-        // Optional: the human-readable name of this extension as string.
-        // This and any other string to be displayed in the Scratch UI may either be
-        // a string or a call to `formatMessage`; a plain string will not be
-        // translated whereas a call to `formatMessage` will connect the string
-        // to the translation map (see below). The `formatMessage` call is
-        // similar to `formatMessage` from `react-intl` in form, but will actually
-        // call some extension support code to do its magic. For example, we will
-        // internally namespace the messages such that two extensions could have
-        // messages with the same ID without colliding.
-        // See also: https://github.com/yahoo/react-intl/wiki/API#formatmessage
-        name: formatMessage({
+    getInfo () {
+        return {
             id: 'ms72',
-            defaultMessage: 'M_S_72 Test',
-            description: 'Extension name'
-        }),
-
-        // Optional: URI for a block icon, to display at the edge of each block for this
-        // extension. Data URI OK.
-        // TODO: what file types are OK? All web images? Just PNG?
-        // ...
-
-        // Optional: URI for an icon to be displayed in the blocks category menu.
-        // If not present, the menu will display the block icon, if one is present.
-        // Otherwise, the category menu shows its default filled circle.
-        // Data URI OK.
-        // TODO: what file types are OK? All web images? Just PNG?
-        // menuIconURI: '',
-
-        // Optional: Link to documentation content for this extension.
-        // If not present, offer no link.
-        // docsURI: 'https://scratch.mit.edu/users/M_S_72',
-
-        // Required: the list of blocks implemented by this extension,
-        // in the order intended for display.
-        blocks: [
-            {
-                // Required: the machine-readable name of this operation.
-                // This will appear in project JSON.
-                opcode: 'testblock1', // becomes 'ms72.testblock1'
-
-                // Required: the kind of block we're defining, from a predefined list:
-                // 'command' - a normal command block, like "move {} steps"
-                // 'reporter' - returns a value, like "direction"
-                // 'Boolean' - same as 'reporter' but returns a Boolean value
-                // 'hat' - starts a stack if its value is truthy
-                // 'conditional' - control flow, like "if {}" or "if {} else {}"
-                // A 'conditional' block may return the one-based index of a branch to
-                // run, or it may return zero/falsy to run no branch.
-                // 'loop' - control flow, like "repeat {} {}" or "forever {}"
-                // A 'loop' block is like a conditional block with two differences:
-                // - the block is assumed to have exactly one child branch, and
-                // - each time a child branch finishes, the loop block is called again.
-                blockType: 'command',
-
-                // Required for conditional blocks, ignored for others: the number of
-                // child branches this block controls. An "if" or "repeat" block would
-                // specify a branch count of 1; an "if-else" block would specify a
-                // branch count of 2.
-                // TODO: should we support dynamic branch count for "switch"-likes?
-                branchCount: 0,
-
-                // Optional, default false: whether or not this block ends a stack.
-                // The "forever" and "stop all" blocks would specify true here.
-                terminal: false,
-
-                // Optional, default false: whether or not to block all threads while
-                // this block is busy. This is for things like the "touching color"
-                // block in compatibility mode, and is only needed if the VM runs in a
-                // worker. We might even consider omitting it from extension docs...
-                blockAllThreads: false,
-
-                // Required: the human-readable text on this block, including argument
-                // placeholders. Argument placeholders should be in [MACRO_CASE] and
-                // must be [ENCLOSED_WITHIN_SQUARE_BRACKETS].
-                text: formatMessage({
-                    id: 'testblock1',
-                    defaultMessage: 'My block. [STRING]',
-                    description: 'Label on the "testblock1" block'
-                }),
-
-                // Required: describe each argument.
-                // Argument order may change during translation, so arguments are
-                // identified by their placeholder name. In those situations where
-                // arguments must be ordered or assigned an ordinal, such as interaction
-                // with Scratch Blocks, arguments are ordered as they are in the default
-                // translation (probably English).
-                arguments: {
-                    // Required: the ID of the argument, which will be the name in the
-                    // args object passed to the implementation function.
-                    STRING: {
-                        // Required: type of the argument / shape of the block input
-                        type: 'string',
-
-                        // Optional: the default value of the argument
-                        default: "Hello"
-                    }
-
+            name: formatMessage({
+                id: 'ms72.categoryName',
+                default: 'M_S_72',
+                description: 'Label for the M_S_72 Test extension category'
+            }),
+            blocks: [
+                {
+                    opcode: 'testblock1',
+                    blockType: BlockType.COMMAND,
+                    text: formatMessage({
+                        id: 'ms72.block.testblock1',
+                        default: 'Test block 1',
+                        description: 'Name of the ms72.testblock1 block. '
+                    })
                 },
-
-                // Required: the function implementing this block.
-                func: 'testblock1',
-
-                // Optional: list of target types for which this block should appear.
-                // If absent, assume it applies to all builtin targets -- that is:
-                // ['sprite', 'stage']
-                filter: ['sprite', 'stage']
+                {
+                    opcode: 'text',
+                    blockType: BlockType.REPORTER,
+                    text: formatMessage({
+                        id: 'ms72.block.text',
+                        default: '[STRING]',
+                        description: 'Name of the ms72.text block. '
+                    }),
+                    arguments: {
+                        STRING: {
+                            type: ArgumentType.STRING,
+                            defaultValue: formatMessage({
+                                id: 'ms72.block.text.default',
+                                default: 'Hello',
+                                description: 'Hello: the default text'
+                            })
+                        }
+                    }
+               }
+            ],
+            menus: {
             },
-            {
-                // Another block...
+            translation_map: {
+             de: {
+                 'extensionName': 'M_S_72 Test',
+                 'ms72.categoryName': 'M_S_72',
+                 'ms72.block.testblock1': 'Testblock 1',
+                 'ms72.block.text': '[STRING]',
+                 'ms72.block.text.default': 'Hallo'
+             }
             }
-        ],
+        };
+    }
+    testblock1 () {
+     
+    }
+    text (args) {
+     
+     return args.STRING;
+    }
+}
 
-        // Optional: define extension-specific menus here.
-        menus: {
-            
-        },
+module.exports = Scratch3MS72Blocks;
 
-        // Optional: translations
-        translation_map: {
-            de: {
-                'extensionName': 'M_S_72 Test',
-                'testblock1': 'Mein Block. [STRING]',
-                'myReporter.STRING_default': 'Hallo',
-
-                // This message contains ICU placeholders 
-                // 'test.result': 'Buchstabe {LETTER_NUM} von {TEXT} ist {LETTER}.'
-            }
-        },
-
-        // Optional: list new target type(s) provided by this extension.
-        targetTypes: [
-            
-        ]
-    };
-};
-
-/**
- * Implement testblock1.
- * @param {object} args - the block's arguments.
- * @property {string} MY_ARG - the string value of the argument. 
- */
-MS72.prototype.testblock1 = function (args) {
-    // This message contains ICU placeholders, not Scratch placeholders
-    // const message = formatMessage({
-    //     id: 'myReporter.result',
-    //     defaultMessage: 'Letter {LETTER_NUM} of {TEXT} is {LETTER}.',
-    //     description: 'The text template for the "myReporter" block result'
-    // });
-
-    // Note: this implementation is not Unicode-clean; it's just here as an example.
-    // const result = args.TEXT.charAt(args.LETTER_NUM);
-
-    // return message.format({
-    //     LETTER_NUM: args.LETTER_NUM,
-    //     TEXT: args.TEXT,
-    //     LETTER: result
-    // });
-};
-module.exports = MS72;
