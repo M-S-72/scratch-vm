@@ -173,3 +173,4 @@ MS72.prototype.testblock1 = function (args) {
     //     LETTER: result
     // });
 };
+module.exports = MS72;
