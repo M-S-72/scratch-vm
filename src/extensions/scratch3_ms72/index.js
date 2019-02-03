@@ -33,25 +33,37 @@ class Scratch3MS72Blocks {
                     })
                 },
                 {
-                    opcode: 'text',
+                    opcode: 'ifthenelse',
                     blockType: BlockType.REPORTER,
                     text: formatMessage({
-                        id: 'ms72.block.text',
-                        default: '[STRING]',
-                        description: 'Name of the ms72.text block. '
+                        id: 'ms72.block.ifthenelse.text',
+                        default: 'if [BOOLEAN] then [STRING1] else [STRING2]',
+                        description: 'Name of the ms72.ifthenelse block. '
                     }),
                     arguments: {
-                        STRING: {
+                        BOOLEAN: {
+                            type: ArgumentType.BOOLEAN,
+                        },
+                        STRING1: {
                             type: ArgumentType.STRING,
                             defaultValue: formatMessage({
-                                id: 'ms72.block.text.default',
-                                default: 'Hello',
-                                description: 'Hello: the default text'
+                                id: 'ms72.block.ifthenelse.then.default',
+                                default: 'apple',
+                                description: 'apple: the default text'
+                            })
+                        },
+                        STRING2: {
+                            type: ArgumentType.STRING,
+                            defaultValue: formatMessage({
+                                id: 'ms72.block.ifthenelse.else.default',
+                                default: 'banana',
+                                description: 'banana: the default text'
                             })
                         }
+
                     }
-               },
-               {
+                },
+                {
                     opcode: 'trueblock',
                     blockType: BlockType.BOOLEAN,
                     text: formatMessage({
@@ -100,7 +112,8 @@ class Scratch3MS72Blocks {
 
                     }
 
-                },{
+                },
+                {
                     opcode: 'pi',
                     blockType: BlockType.REPORTER, 
                     text: formatMessage({
@@ -108,33 +121,54 @@ class Scratch3MS72Blocks {
                         default: 'Pi',
                         description: 'Name of the ms72.pi block. '
                     }),
-                }
+                },
+                {
+                    opcode: 'text',
+                    blockType: BlockType.REPORTER,
+                    text: formatMessage({
+                        id: 'ms72.block.text',
+                        default: '[STRING]',
+                        description: 'Name of the ms72.text block. '
+                    }),
+                    arguments: {
+                        STRING: {
+                            type: ArgumentType.STRING,
+                            defaultValue: formatMessage({
+                                id: 'ms72.block.text.default',
+                                default: 'Hello',
+                                description: 'Hello: the default text'
+                            })
+                        }
+                    }
+               }
+
             ],
             menus: {
             },
             translation_map: {
-             de: {
-                 'extensionName': 'M_S_72 Test',
-                 'ms72.categoryName': 'M_S_72',
-                 'ms72.true': 'wahr',
-                 'ms72.false': 'falsch',
-                 'ms72.block.testblock1': 'Testblock 1',
-                 'ms72.block.text': '[STRING]',
-                 'ms72.block.text.default': 'Hallo',
-                 'ms72.block.ifthenelse.text': 'falls [BOOLEAN], dann [STRING1], sonst [STRING2]',
-                 'ms72.block.ifthenelse.then.default': 'Apfel',
-                 'ms72.block.ifthenelse.else.default': 'Banane',
-                 'ms72.block.pi.text': 'Pi'
-             }
+                de: {
+                    'extensionName': 'M_S_72 Test',
+                    'ms72.categoryName': 'M_S_72',
+                    'ms72.true': 'wahr',
+                    'ms72.false': 'falsch',
+                    'ms72.block.testblock1': 'Testblock 1',
+                    'ms72.block.ifthenelse.text': 'falls [BOOLEAN], dann [STRING1], sonst [STRING2]',
+                    'ms72.block.ifthenelse.then.default': 'Apfel',
+                    'ms72.block.ifthenelse.else.default': 'Banane',
+                    'ms72.block.pi.text': 'Pi',
+                    'ms72.block.text': '[STRING]',
+                    'ms72.block.text.default': 'Hallo'
+                }
             }
         };
     }
     testblock1 () {
      
     }
-    text (args) {
+    ifthenelse (args) {
      
-     return args.STRING;
+     if(args.BOOLEAN) return args.STRING1;
+     else return args.STRING2;
     }
     trueblock () {
      
@@ -144,14 +178,13 @@ class Scratch3MS72Blocks {
      
      return false;
     }
-    ifthenelse (args) {
-     
-     if(args.BOOLEAN) return args.STRING1;
-     else return args.STRING2;
-    }
     pi () {
      
      return 3.1415926535897932384626433832795;
+    }
+    text (args) {
+     
+     return args.STRING;
     }
 }
 
