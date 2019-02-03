@@ -141,9 +141,6 @@ MS72.prototype.getInfo = function () {
 
                 // This message contains ICU placeholders 
                 // 'test.result': 'Buchstabe {LETTER_NUM} von {TEXT} ist {LETTER}.'
-            },
-            it: {
-                // ...
             }
         },
 
