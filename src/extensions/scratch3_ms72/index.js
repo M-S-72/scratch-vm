@@ -55,6 +55,26 @@ class Scratch3MS72Blocks {
                     }
                 },
                 {
+                    opcode: 'ifthenelseboolean',
+                    blockType: BlockType.BOOLEAN,
+                    text: formatMessage({
+                        id: 'ms72.block.ifthenelseboolean.text',
+                        default: 'if [BOOLEAN] then [VALUE1] else [VALUE2]',
+                        description: 'Name of the ms72.ifthenelse block. '
+                    }),
+                    arguments: {
+                        BOOLEAN: {
+                            type: ArgumentType.BOOLEAN
+                        },
+                        VALUE1: {
+                            type: ArgumentType.BOOLEAN
+                        },
+                        VALUE2: {
+                            type: ArgumentType.BOOLEAN
+                        }
+                    }
+                },
+                {
                     opcode: 'trueblock',
                     blockType: BlockType.BOOLEAN,
                     text: formatMessage({
@@ -180,9 +200,10 @@ class Scratch3MS72Blocks {
                     'ms72.trueblock.text': 'wahr (ERSETZE DIESEM BLOCK)',
                     'ms72.falseblock.text': 'falsch (ERSETZE DIESEN BLOCK)',
                     'ms72.block.testblock1': 'Testblock 1',
-                    'ms72.block.ifthenelse.text': 'falls [BOOLEAN], dann [STRING1], sonst [STRING2]',
+                    'ms72.block.ifthenelse.text': 'falls [BOOLEAN] dann [STRING1] sonst [STRING2]',
                     'ms72.block.ifthenelse.then.default': 'Apfel',
                     'ms72.block.ifthenelse.else.default': 'Banane',
+                    'ms72.block.ifthenelseboolean.text': 'falls [BOOLEAN] dann [VALUE1] sonst [VALUE2]',
                     'ms72.block.pi.text': 'Pi',
                     'ms72.block.text.text': '[STRING]',
                     'ms72.block.text.default': 'Hallo',
@@ -195,6 +216,11 @@ class Scratch3MS72Blocks {
      
      if(args.BOOLEAN) return args.STRING1;
      else return args.STRING2;
+    }
+    ifthenelseboolean (args) {
+     
+     if(args.BOOLEAN) return args.VALUE1;
+     else return args.VALUE2;
     }
     trueblock () {
      
