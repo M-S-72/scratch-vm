@@ -4,12 +4,17 @@ const formatMessage = require('format-message');
 const MathUtil = require('../../util/math-util');
 
 class Scratch3MS72Blocks {
+    
     constructor (runtime) {
         /**
          * The runtime instantiating this block package.
          * @type {Runtime}
          */
         this.runtime = runtime;
+        
+        this.drawablesNextIndex = 0;
+        this.drawableIds = [];
+        this.skinIds = [];
     }
     /**
      * @returns {object} metadata for this extension and its blocks.
@@ -24,6 +29,42 @@ class Scratch3MS72Blocks {
             }),
             blocks: [
                 {
+                    opcode: 'drawtext',
+                    blockType: BlockType.COMMAND,
+                    text: formatMessage({
+                        id: 'ms72.block.drawtext.text',
+                        default: 'draw[TEXT]x:[X]y:[Y]',
+                        description: 'Name of the ms72.drawtext block. '
+                    }),
+                    arguments: {
+                        TEXT: {
+                            type: ArgumentType.STRING,
+                            defaultValue: formatMessage({
+                                id: 'ms72.block.drawtext.text.default',
+                                default: 'Hello!',
+                                description: 'Hello: the default text'
+                            })
+                        },
+                        X: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: 0
+                        },
+                        Y: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: 0
+                        }
+                    }
+               },
+               {
+                    opcode: 'cleartext',
+                    blockType: BlockType.COMMAND,
+                    text: formatMessage({
+                        id: 'ms72.block.cleartext.text',
+                        default: 'Remove text',
+                        description: 'Name of the ms72.cleartext block. '
+                    })
+               },
+               {
                     opcode: 'ifthenelse',
                     blockType: BlockType.REPORTER,
                     text: formatMessage({
@@ -153,7 +194,6 @@ class Scratch3MS72Blocks {
                         }
                     }
                }
-
             ],
             menus: {
                 mathMenu: [
@@ -197,9 +237,12 @@ class Scratch3MS72Blocks {
                 de: {
                     'extensionName': 'M_S_72 Test',
                     'ms72.categoryName': 'M_S_72',
+                    'gui.extension.ms72.description': 'Meine Test-Erweiterung.',
+                    'ms72.block.drawtext.text': 'zeichne[TEXT]x:[X]y:[Y]',
+                    'ms72.block.drawtext.text.default': 'Hallo!',
+                    'ms72.block.cleartext.text': 'lösche Text',
                     'ms72.trueblock.text': 'wahr (ERSETZE DIESEM BLOCK)',
                     'ms72.falseblock.text': 'falsch (ERSETZE DIESEN BLOCK)',
-                    'ms72.block.testblock1': 'Testblock 1',
                     'ms72.block.ifthenelse.text': 'falls [BOOLEAN] dann [STRING1] sonst [STRING2]',
                     'ms72.block.ifthenelse.then.default': 'Apfel',
                     'ms72.block.ifthenelse.else.default': 'Banane',
@@ -211,6 +254,31 @@ class Scratch3MS72Blocks {
                 }
             }
         };
+    }
+    drawtext (args) {
+     
+     this.drawableId = this.runtime.renderer.createDrawable('pen');
+     this.skinId = this.runtime.renderer.createSVGSkin('<svg height="20" width="100"><text x="' + args.X + '" y="' + args.Y * -1 + '">' + args.TEXT + '</text></svg>');
+     this.runtime.renderer.updateDrawableProperties(this.drawableId, { skinId: this.skinId });
+     
+     this.drawableIds[this.drawablesNextIndex] = this.drawableId;
+     this.skinIds[this.drawablesNextIndex] = this.skinId;
+     this.drawablesNextIndex++;
+    }
+    cleartext () {
+     
+     var runtime = this.runtime;
+     
+     this.skinIds.forEach(function(item) {
+      
+      runtime.renderer.destroySkin(item);
+     });
+     this.drawableIds.forEach(function(item) {
+      
+      runtime.renderer.destroyDrawable(item, 'pen');
+     });
+     this.skinIds = [];
+     this.drawableIds = [];
     }
     ifthenelse (args) {
      
