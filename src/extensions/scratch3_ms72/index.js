@@ -12,9 +12,12 @@ class Scratch3MS72Blocks {
          */
         this.runtime = runtime;
         
-        this.drawablesNextIndex = 0;
-        this.drawableIds = [];
-        this.skinIds = [];
+        this.textDrawablesNextIndex = 0;
+        this.textDrawableIds = [];
+        this.textSkinIds = [];
+        
+        this.fillDrawableId = undefined;
+        this.fillSkinId = undefined;
     }
     /**
      * @returns {object} metadata for this extension and its blocks.
@@ -267,7 +270,30 @@ class Scratch3MS72Blocks {
                          default: 'Remove text',
                          description: 'Name of the ms72.cleartext block. '
                      })
-                }
+                },
+                {
+                     opcode: 'fill',
+                     blockType: BlockType.COMMAND,
+                     text: formatMessage({
+                         id: 'ms72.block.fill.text',
+                         default: 'fill with [COLOR]',
+                         description: 'Name of the ms72.fill block. '
+                     }),
+                     arguments: {
+				    COLOR: {
+                             type: ArgumentType.COLOR
+                         }
+                     }
+                },
+                {
+                     opcode: 'clearfill',
+                     blockType: BlockType.COMMAND,
+                     text: formatMessage({
+                         id: 'ms72.block.clearfill.text',
+                         default: 'Remove fill',
+                         description: 'Name of the ms72.clearfill block. '
+                     })
+                },
              ],
              menus: {
                  mathMenu: [
@@ -374,6 +400,8 @@ class Scratch3MS72Blocks {
                      'ms72.block.drawtext.text.default': 'Hallo!',
                      'ms72.block.drawtext2.text': 'schreibe[TEXT]x:[X]y:[Y]Schrift:[FONT]Farbe:[COLOR]',
                      'ms72.block.cleartext.text': 'lösche Text',
+                     'ms72.block.fill.text': 'mit [COLOR] füllen',
+                     'ms72.block.clearfill.text': 'lösche Füllung',
                      
                      
                      'ms72.menus.booleanMenu.true': 'wahr',
@@ -436,37 +464,63 @@ class Scratch3MS72Blocks {
          this.skinId = this.runtime.renderer.createSVGSkin('<svg height="20" width="100"><text x="' + args.X + '" y="' + args.Y * -1 + '" font-family="Helvetica">' + args.TEXT + '</text></svg>');
          this.runtime.renderer.updateDrawableProperties(this.drawableId, { skinId: this.skinId });
          
-         this.drawableIds[this.drawablesNextIndex] = this.drawableId;
-         this.skinIds[this.drawablesNextIndex] = this.skinId;
-         this.drawablesNextIndex++;
+         this.textDrawableIds[this.textDrawablesNextIndex] = this.drawableId;
+         this.textSkinIds[this.textDrawablesNextIndex] = this.skinId;
+         this.textDrawablesNextIndex++;
      }
      drawtext2(args){
          
          const rgb = Cast.toRgbColorObject(args.COLOR);
          const color = '#' + (rgb.r <= 15? '0' + Number(rgb.r).toString(16) : Number(rgb.r).toString(16)) + (rgb.g <= 15? '0' + Number(rgb.g).toString(16) : Number(rgb.g).toString(16)) + (rgb.b <= 15? '0' + Number(rgb.b).toString(16) : Number(rgb.b).toString(16));
          
-         this.drawableId = this.runtime.renderer.createDrawable('pen');
-         this.skinId = this.runtime.renderer.createSVGSkin('<svg height="20" width="100"><text x="' + args.X + '" y="' + args.Y * -1 + '" font-family="' + args.FONT + '" fill="' + color + '">' + args.TEXT + '</text></svg>');
-         this.runtime.renderer.updateDrawableProperties(this.drawableId, { skinId: this.skinId });
+         const drawableId = this.runtime.renderer.createDrawable('pen');
+         const skinId = this.runtime.renderer.createSVGSkin('<svg height="20" width="100"><text x="' + args.X + '" y="' + args.Y * -1 + '" font-family="' + args.FONT + '" fill="' + color + '">' + args.TEXT + '</text></svg>');
+         this.runtime.renderer.updateDrawableProperties(drawableId, { skinId: skinId });
          
-         this.drawableIds[this.drawablesNextIndex] = this.drawableId;
-         this.skinIds[this.drawablesNextIndex] = this.skinId;
-         this.drawablesNextIndex++;
+         this.textDrawableIds[this.textDrawablesNextIndex] = drawableId;
+         this.textSkinIds[this.textDrawablesNextIndex] = skinId;
+         this.textDrawablesNextIndex++;
      }
      cleartext(){
          
          var runtime = this.runtime;
          
-         this.skinIds.forEach(function(item) {
+         this.textSkinIds.forEach(function(item) {
           
           runtime.renderer.destroySkin(item);
          });
-         this.drawableIds.forEach(function(item) {
+         this.textDrawableIds.forEach(function(item) {
           
           runtime.renderer.destroyDrawable(item, 'pen');
          });
-         this.skinIds = [];
-         this.drawableIds = [];
+         this.textSkinIds = [];
+         this.textDrawableIds = [];
+     }
+     fill(args){
+         
+         const rgb = Cast.toRgbColorObject(args.COLOR);
+         const color = '#' + (rgb.r <= 15? '0' + Number(rgb.r).toString(16) : Number(rgb.r).toString(16)) + (rgb.g <= 15? '0' + Number(rgb.g).toString(16) : Number(rgb.g).toString(16)) + (rgb.b <= 15? '0' + Number(rgb.b).toString(16) : Number(rgb.b).toString(16));
+         
+         if(this.fillDrawableId == undefined) {
+             const drawableId = this.runtime.renderer.createDrawable('pen');
+             const skinId = this.runtime.renderer.createSVGSkin('<svg width="960" height="720"><rect x="-240" y="-180" width="960" height="720" fill="' + color + '"/></svg>');
+             this.runtime.renderer.updateDrawableProperties(drawableId, { skinId: skinId });
+             this.runtime.renderer.setDrawableOrder(drawableId, 1, 'pen');
+             
+             this.fillDrawableId = drawableId;
+             this.fillSkinId = skinId;
+         }
+         else {
+             this.runtime.renderer.updateSVGSkin(this.fillSkinId, '<svg width="960" height="720"><rect x="-240" y="-180" width="960" height="720" fill="' + color + '"/></svg>');
+         }
+     }
+     clearfill(){
+         
+         this.runtime.renderer.destroySkin(this.fillSkinId);
+         this.runtime.renderer.destroyDrawable(this.fillDrawableId, 'pen');
+         
+         this.fillSkinId = undefined;
+         this.fillDrawableId = undefined;
      }
 }
 
