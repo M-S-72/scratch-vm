@@ -343,6 +343,36 @@ class Scratch3MS72Blocks {
                              defaultValue: 10
                          }
                      }
+                },
+                {
+                     opcode: 'smallerOrEqual',
+                     blockType: BlockType.BOOLEAN,
+                     text: '[NUMBER1] <= [NUMBER2]',
+                     arguments: {
+                         NUMBER1: {
+                             type: ArgumentType.NUMBER,
+                             defaultValue: 1
+                         },
+                         NUMBER2: {
+                             type: ArgumentType.NUMBER,
+                             defaultValue: 2
+                         }
+                     }
+                },
+                {
+                     opcode: 'greaterOrEqual',
+                     blockType: BlockType.BOOLEAN,
+                     text: '[NUMBER1] >= [NUMBER2]',
+                     arguments: {
+                         NUMBER1: {
+                             type: ArgumentType.NUMBER,
+                             defaultValue: 2
+                         },
+                         NUMBER2: {
+                             type: ArgumentType.NUMBER,
+                             defaultValue: 1
+                         }
+                     }
                 }
              ],
              menus: {
@@ -582,6 +612,14 @@ class Scratch3MS72Blocks {
      isBetween(args){
          
          return Number(args.NUMBER) >= Number(args.NUMBER1) && Number(args.NUMBER) <= Number(args.NUMBER2);
+     }
+     smallerOrEqual(args){
+         
+         return args.NUMBER1 <= args.NUMBER2;
+     }
+     greaterOrEqual(args){
+         
+         return args.NUMBER1 >= args.NUMBER2;
      }
 }
 
