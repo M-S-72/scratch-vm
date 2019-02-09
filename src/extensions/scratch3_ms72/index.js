@@ -294,6 +294,34 @@ class Scratch3MS72Blocks {
                          description: 'Name of the ms72.clearfill block. '
                      })
                 },
+                {
+                     opcode: 'isExactly',
+                     blockType: BlockType.BOOLEAN,
+                     text: formatMessage({
+                         id: 'ms72.block.isExactly.text',
+                         default: '[STRING1] is exactly [STRING2]?',
+                         description: 'Name of the ms72.isExactly block. '
+                     }),
+                     arguments: {
+                         STRING1: {
+                             type: ArgumentType.STRING,
+                             defaultValue: formatMessage({
+                                 id: 'ms72.block.isExactly.string1',
+                                 default: 'Hello',
+                                 description: 'Hello: the default text'
+                             })
+                         },
+                         STRING2: {
+                             type: ArgumentType.STRING,
+                             defaultValue: formatMessage({
+                                 id: 'ms72.block.isExactly.string2',
+                                 default: 'hello',
+                                 description: 'hello: the default text'
+                             })
+                         }
+                     }
+                },
+
              ],
              menus: {
                  mathMenu: [
@@ -402,7 +430,9 @@ class Scratch3MS72Blocks {
                      'ms72.block.cleartext.text': 'lösche Text',
                      'ms72.block.fill.text': 'mit [COLOR] füllen',
                      'ms72.block.clearfill.text': 'lösche Füllung',
-                     
+                     'ms72.block.isExactly.text': 'ist [STRING1] genau [STRING2]?',
+                     'ms72.block.isExactly.string1': 'Hallo',
+                     'ms72.block.isExactly.string2': 'hallo',
                      
                      'ms72.menus.booleanMenu.true': 'wahr',
                      'ms72.menus.booleanMenu.false': 'falsch',
@@ -521,6 +551,10 @@ class Scratch3MS72Blocks {
          
          this.fillSkinId = undefined;
          this.fillDrawableId = undefined;
+     }
+     isExactly(args){
+         
+         return args.STRING1 == args.STRING2;
      }
 }
 
