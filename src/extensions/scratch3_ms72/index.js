@@ -1,5 +1,6 @@
 const ArgumentType = require('../../extension-support/argument-type');
 const BlockType = require('../../extension-support/block-type');
+const Cast = require('../../util/cast');
 const formatMessage = require('format-message');
 
 class Scratch3MS72Blocks {
@@ -27,42 +28,6 @@ class Scratch3MS72Blocks {
                 description: 'Label for the M_S_72 Test extension category'
             }),
             blocks: [
-                {
-                    opcode: 'drawtext',
-                    blockType: BlockType.COMMAND,
-                    text: formatMessage({
-                        id: 'ms72.block.drawtext.text',
-                        default: 'draw[TEXT]x:[X]y:[Y]',
-                        description: 'Name of the ms72.drawtext block. '
-                    }),
-                    arguments: {
-                        TEXT: {
-                            type: ArgumentType.STRING,
-                            defaultValue: formatMessage({
-                                id: 'ms72.block.drawtext.text.default',
-                                default: 'Hello!',
-                                description: 'Hello: the default text'
-                            })
-                        },
-                        X: {
-                            type: ArgumentType.NUMBER,
-                            defaultValue: 0
-                        },
-                        Y: {
-                            type: ArgumentType.NUMBER,
-                            defaultValue: 0
-                        }
-                    }
-                },
-                {
-                     opcode: 'cleartext',
-                     blockType: BlockType.COMMAND,
-                     text: formatMessage({
-                         id: 'ms72.block.cleartext.text',
-                         default: 'Remove text',
-                         description: 'Name of the ms72.cleartext block. '
-                     })
-                },
                 {
                      opcode: 'ifthenelse',
                      blockType: BlockType.REPORTER,
@@ -192,6 +157,116 @@ class Scratch3MS72Blocks {
                              defaultValue: 1
                          }
                      }
+                },
+                {
+                     opcode: 'numbersystemWithMenu',
+                     blockType: BlockType.REPORTER,
+                     text: formatMessage({
+                         id: 'ms72.block.numbersystemWithMenu.text',
+                         default: '[NUMBER] in [BASE] system',
+                         description: 'Name of the ms72.numbersystem block. '
+                     }),
+                     arguments: {
+                         NUMBER: {
+                             type: ArgumentType.NUMBER,
+                             defaultValue: 1
+                         },
+                         BASE: {
+                             type: ArgumentType.NUMBER,
+                             menu: 'numberSystemMenu',
+                             defaultValue: 2
+                         }
+                     }
+                },
+                {
+                     opcode: 'numbersystem',
+                     blockType: BlockType.REPORTER,
+                     text: formatMessage({
+                         id: 'ms72.block.numbersystem.text',
+                         default: '[NUMBER] in [BASE] system',
+                         description: 'Name of the ms72.numbersystem block. '
+                     }),
+                     arguments: {
+                         NUMBER: {
+                             type: ArgumentType.NUMBER,
+                             defaultValue: 1
+                         },
+                         BASE: {
+                             type: ArgumentType.NUMBER,
+                             defaultValue: 2
+                         }
+                     }
+                },
+                {
+                    opcode: 'drawtext',
+                    blockType: BlockType.COMMAND,
+                    text: formatMessage({
+                        id: 'ms72.block.drawtext.text',
+                        default: 'write[TEXT]x:[X]y:[Y]',
+                        description: 'Name of the ms72.drawtext block. '
+                    }),
+                    arguments: {
+                        TEXT: {
+                            type: ArgumentType.STRING,
+                            defaultValue: formatMessage({
+                                id: 'ms72.block.drawtext.text.default',
+                                default: 'Hello!',
+                                description: 'Hello: the default text'
+                            })
+                        },
+                        X: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: 0
+                        },
+                        Y: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: 0
+                        }
+                    }
+                },
+                {
+                    opcode: 'drawtext2',
+                    blockType: BlockType.COMMAND,
+                    text: formatMessage({
+                        id: 'ms72.block.drawtext2.text',
+                        default: 'write[TEXT]x:[X]y:[Y]font:[FONT]color:[COLOR]',
+                        description: 'Name of the ms72.drawtext2 block. '
+                    }),
+                    arguments: {
+                        TEXT: {
+                            type: ArgumentType.STRING,
+                            defaultValue: formatMessage({
+                                id: 'ms72.block.drawtext.text.default',
+                                default: 'Hello!',
+                                description: 'Hello: the default text'
+                            })
+                        },
+                        X: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: 0
+                        },
+                        Y: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: 0
+                        },
+                        FONT: {
+                            type: ArgumentType.STRING,
+                            menu: 'fontMenu',
+                            defaultValue: 'Helvetica'
+                        },
+                        COLOR: {
+                            type: ArgumentType.COLOR
+                        }
+                    }
+                },
+                {
+                     opcode: 'cleartext',
+                     blockType: BlockType.COMMAND,
+                     text: formatMessage({
+                         id: 'ms72.block.cleartext.text',
+                         default: 'Remove text',
+                         description: 'Name of the ms72.cleartext block. '
+                     })
                 }
              ],
              menus: {
@@ -230,6 +305,52 @@ class Scratch3MS72Blocks {
                              description: 'Text of the false value'
                          })
                      }
+                 ],
+                 fontMenu: [
+                     {
+                         value: 'helvetica',
+                         text: 'Helvetica'
+                     },
+                     {
+                         value: 'arial',
+                         text: 'Arial'
+                     },
+                     'sans-serif',
+                     'serif'
+                 ],
+                 numberSystemMenu: [
+                     {
+                         value: 2,
+                         text: formatMessage({
+                             id: 'ms72.menus.numberSystemMenu.binary',
+                             default: 'binary',
+                             description: 'Text of the "binary" value'
+                         })
+                     },
+                     {
+                         value: 8,
+                         text: formatMessage({
+                             id: 'ms72.menus.numberSystemMenu.octal',
+                             default: 'octal',
+                             description: 'Text of the "octal" value'
+                         })
+                     },
+                     {
+                         value: 10,
+                         text: formatMessage({
+                             id: 'ms72.menus.numberSystemMenu.decimal',
+                             default: 'decimal',
+                             description: 'Text of the "decimal" value'
+                         })
+                     },
+                     {
+                         value: 16,
+                         text: formatMessage({
+                             id: 'ms72.menus.numberSystemMenu.hexadecimal',
+                             default: 'hexadecimal',
+                             description: 'Text of the "hexadecimal" value'
+                         })
+                     }
                  ]
              },
              translation_map: {
@@ -237,9 +358,6 @@ class Scratch3MS72Blocks {
                      'extensionName': 'M_S_72 Test',
                      'ms72.categoryName': 'M_S_72',
                      'gui.extension.ms72.description': 'Meine Test-Erweiterung.',
-                     'ms72.block.drawtext.text': 'zeichne[TEXT]x:[X]y:[Y]',
-                     'ms72.block.drawtext.text.default': 'Hallo!',
-                     'ms72.block.cleartext.text': 'lösche Text',
                      'ms72.trueblock.text': 'wahr (ERSETZE DIESEM BLOCK)',
                      'ms72.falseblock.text': 'falsch (ERSETZE DIESEN BLOCK)',
                      'ms72.block.ifthenelse.text': 'falls [BOOLEAN] dann [STRING1] sonst [STRING2]',
@@ -249,35 +367,25 @@ class Scratch3MS72Blocks {
                      'ms72.block.pi.text': 'Pi',
                      'ms72.block.text.text': '[STRING]',
                      'ms72.block.text.default': 'Hallo',
-                     'ms72.block.math.text': '[NUMBER1][MENU][NUMBER2]'
+                     'ms72.block.math.text': '[NUMBER1][MENU][NUMBER2]',
+                     'ms72.block.numbersystemWithMenu.text': '[NUMBER] im [BASE]-System',
+                     'ms72.block.numbersystem.text': '[NUMBER] im [BASE]er-System',
+                     'ms72.block.drawtext.text': 'schreibe[TEXT]x:[X]y:[Y]',
+                     'ms72.block.drawtext.text.default': 'Hallo!',
+                     'ms72.block.drawtext2.text': 'schreibe[TEXT]x:[X]y:[Y]Schrift:[FONT]Farbe:[COLOR]',
+                     'ms72.block.cleartext.text': 'lösche Text',
+                     
+                     
+                     'ms72.menus.booleanMenu.true': 'wahr',
+                     'ms72.menus.booleanMenu.false': 'falsch',
+                     
+                     'ms72.menus.numberSystemMenu.binary': 'Binär',
+                     'ms72.menus.numberSystemMenu.octal': 'Oktal',
+                     'ms72.menus.numberSystemMenu.decimal': 'Dezimal',
+                     'ms72.menus.numberSystemMenu.hexadecimal': 'Hexadezimal'
                  }
              }
          };
-     }
-     drawtext(args){
-         
-         this.drawableId = this.runtime.renderer.createDrawable('pen');
-         this.skinId = this.runtime.renderer.createSVGSkin('<svg height="20" width="100"><text x="' + args.X + '" y="' + args.Y * -1 + '">' + args.TEXT + '</text></svg>');
-         this.runtime.renderer.updateDrawableProperties(this.drawableId, { skinId: this.skinId });
-         
-         this.drawableIds[this.drawablesNextIndex] = this.drawableId;
-         this.skinIds[this.drawablesNextIndex] = this.skinId;
-         this.drawablesNextIndex++;
-     }
-     cleartext(){
-         
-         var runtime = this.runtime;
-         
-         this.skinIds.forEach(function(item) {
-          
-          runtime.renderer.destroySkin(item);
-         });
-         this.drawableIds.forEach(function(item) {
-          
-          runtime.renderer.destroyDrawable(item, 'pen');
-         });
-         this.skinIds = [];
-         this.drawableIds = [];
      }
      ifthenelse(args){
          
@@ -299,8 +407,9 @@ class Scratch3MS72Blocks {
      }
      booleanblock(args){
          
-         if (args.BOOLEAN == 'true') return true;
-         if (args.BOOLEAN == 'false') return false;
+         if ('true'.localeCompare(args.BOOLEAN, undefined, { sensitivity: 'accent' }) === 0) return true;
+         if ('false'.localeCompare(args.BOOLEAN, undefined, { sensitivity: 'accent' }) === 0) return false;
+         return false;
      }
      text(args){
          
@@ -312,6 +421,52 @@ class Scratch3MS72Blocks {
          if (args.MENU == 'subtract') return Number(args.NUMBER1) - Number(args.NUMBER2);
          if (args.MENU == 'multiply') return Number(args.NUMBER1) * Number(args.NUMBER2);
          if (args.MENU == 'divide') return Number(args.NUMBER1) / Number(args.NUMBER2);
+     }
+     numbersystemWithMenu(args){
+         
+         return Number(args.NUMBER).toString(args.BASE);
+     }
+     numbersystem(args){
+         
+         return Number(args.NUMBER).toString(args.BASE);
+     }
+     drawtext(args){
+         
+         this.drawableId = this.runtime.renderer.createDrawable('pen');
+         this.skinId = this.runtime.renderer.createSVGSkin('<svg height="20" width="100"><text x="' + args.X + '" y="' + args.Y * -1 + '" font-family="Helvetica">' + args.TEXT + '</text></svg>');
+         this.runtime.renderer.updateDrawableProperties(this.drawableId, { skinId: this.skinId });
+         
+         this.drawableIds[this.drawablesNextIndex] = this.drawableId;
+         this.skinIds[this.drawablesNextIndex] = this.skinId;
+         this.drawablesNextIndex++;
+     }
+     drawtext2(args){
+         
+         const rgb = Cast.toRgbColorObject(args.COLOR);
+         const color = '#' + (rgb.r <= 15? '0' + Number(rgb.r).toString(16) : Number(rgb.r).toString(16)) + (rgb.g <= 15? '0' + Number(rgb.g).toString(16) : Number(rgb.g).toString(16)) + (rgb.b <= 15? '0' + Number(rgb.b).toString(16) : Number(rgb.b).toString(16));
+         
+         this.drawableId = this.runtime.renderer.createDrawable('pen');
+         this.skinId = this.runtime.renderer.createSVGSkin('<svg height="20" width="100"><text x="' + args.X + '" y="' + args.Y * -1 + '" font-family="' + args.FONT + '" fill="' + color + '">' + args.TEXT + '</text></svg>');
+         this.runtime.renderer.updateDrawableProperties(this.drawableId, { skinId: this.skinId });
+         
+         this.drawableIds[this.drawablesNextIndex] = this.drawableId;
+         this.skinIds[this.drawablesNextIndex] = this.skinId;
+         this.drawablesNextIndex++;
+     }
+     cleartext(){
+         
+         var runtime = this.runtime;
+         
+         this.skinIds.forEach(function(item) {
+          
+          runtime.renderer.destroySkin(item);
+         });
+         this.drawableIds.forEach(function(item) {
+          
+          runtime.renderer.destroyDrawable(item, 'pen');
+         });
+         this.skinIds = [];
+         this.drawableIds = [];
      }
 }
 
