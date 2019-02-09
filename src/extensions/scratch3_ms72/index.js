@@ -299,7 +299,7 @@ class Scratch3MS72Blocks {
                      blockType: BlockType.BOOLEAN,
                      text: formatMessage({
                          id: 'ms72.block.isExactly.text',
-                         default: '[STRING1] is exactly [STRING2]?',
+                         default: 'is [STRING1] exactly [STRING2]?',
                          description: 'Name of the ms72.isExactly block. '
                      }),
                      arguments: {
@@ -321,7 +321,29 @@ class Scratch3MS72Blocks {
                          }
                      }
                 },
-
+                {
+                     opcode: 'isBetween',
+                     blockType: BlockType.BOOLEAN,
+                     text: formatMessage({
+                         id: 'ms72.block.isBetween.text',
+                         default: 'is [NUMBER] between [NUMBER1] and [NUMBER2]?',
+                         description: 'Name of the ms72.isBetween block. '
+                     }),
+                     arguments: {
+                         NUMBER: {
+                             type: ArgumentType.NUMBER,
+                             defaultValue: 5
+                         },
+                         NUMBER1: {
+                             type: ArgumentType.NUMBER,
+                             defaultValue: 1
+                         },
+                         NUMBER2: {
+                             type: ArgumentType.NUMBER,
+                             defaultValue: 10
+                         }
+                     }
+                }
              ],
              menus: {
                  mathMenu: [
@@ -433,6 +455,7 @@ class Scratch3MS72Blocks {
                      'ms72.block.isExactly.text': 'ist [STRING1] genau [STRING2]?',
                      'ms72.block.isExactly.string1': 'Hallo',
                      'ms72.block.isExactly.string2': 'hallo',
+                     'ms72.block.isBetween.text': 'liegt [NUMBER] zwischen [NUMBER1] und [NUMBER2]?',
                      
                      'ms72.menus.booleanMenu.true': 'wahr',
                      'ms72.menus.booleanMenu.false': 'falsch',
@@ -555,6 +578,10 @@ class Scratch3MS72Blocks {
      isExactly(args){
          
          return args.STRING1 == args.STRING2;
+     }
+     isBetween(args){
+         
+         return Number(args.NUMBER) >= Number(args.NUMBER1) && Number(args.NUMBER) <= Number(args.NUMBER2);
      }
 }
 
