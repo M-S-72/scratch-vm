@@ -481,7 +481,7 @@ class Scratch3MS72Blocks {
                      'ms72.block.drawtext2.text': 'schreibe[TEXT]x:[X]y:[Y]Schrift:[FONT]Farbe:[COLOR]',
                      'ms72.block.cleartext.text': 'lösche Text',
                      'ms72.block.fill.text': 'mit [COLOR] füllen',
-                     'ms72.block.clearfill.text': 'lösche Füllung',
+                     'ms72.block.clearfill.text': 'lösche Gefülltes',
                      'ms72.block.isExactly.text': 'ist [STRING1] genau [STRING2]?',
                      'ms72.block.isExactly.string1': 'Hallo',
                      'ms72.block.isExactly.string2': 'hallo',
