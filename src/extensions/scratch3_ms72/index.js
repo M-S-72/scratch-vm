@@ -4,18 +4,18 @@ const Cast = require('../../util/cast');
 const formatMessage = require('format-message');
 
 class Scratch3MS72Blocks {
-    
+
     constructor (runtime) {
         /**
          * The runtime instantiating this block package.
          * @type {Runtime}
          */
         this.runtime = runtime;
-        
+
         this.textDrawablesNextIndex = 0;
         this.textDrawableIds = [];
         this.textSkinIds = [];
-        
+
         this.fillDrawableId = undefined;
         this.fillSkinId = undefined;
     }
@@ -59,7 +59,7 @@ class Scratch3MS72Blocks {
                                  description: 'banana: the default text'
                              })
                          }
- 
+
                      }
                  },
                  {
@@ -479,18 +479,18 @@ class Scratch3MS72Blocks {
                      'ms72.block.drawtext.text': 'schreibe[TEXT]x:[X]y:[Y]',
                      'ms72.block.drawtext.text.default': 'Hallo!',
                      'ms72.block.drawtext2.text': 'schreibe[TEXT]x:[X]y:[Y]Schrift:[FONT]Farbe:[COLOR]',
-                     'ms72.block.cleartext.text': 'lösche Text',
-                     'ms72.block.fill.text': 'mit [COLOR] füllen',
-                     'ms72.block.clearfill.text': 'lösche Gefülltes',
+                     'ms72.block.cleartext.text': 'lï¿½sche Text',
+                     'ms72.block.fill.text': 'mit [COLOR] fï¿½llen',
+                     'ms72.block.clearfill.text': 'lï¿½sche Gefï¿½lltes',
                      'ms72.block.isExactly.text': 'ist [STRING1] genau [STRING2]?',
                      'ms72.block.isExactly.string1': 'Hallo',
                      'ms72.block.isExactly.string2': 'hallo',
                      'ms72.block.isBetween.text': 'liegt [NUMBER] zwischen [NUMBER1] und [NUMBER2]?',
-                     
+
                      'ms72.menus.booleanMenu.true': 'wahr',
                      'ms72.menus.booleanMenu.false': 'falsch',
-                     
-                     'ms72.menus.numberSystemMenu.binary': 'Binär',
+
+                     'ms72.menus.numberSystemMenu.binary': 'Binï¿½r',
                      'ms72.menus.numberSystemMenu.octal': 'Oktal',
                      'ms72.menus.numberSystemMenu.decimal': 'Dezimal',
                      'ms72.menus.numberSystemMenu.hexadecimal': 'Hexadezimal'
@@ -499,129 +499,128 @@ class Scratch3MS72Blocks {
          };
      }
      ifthenelse(args){
-         
+
          if(args.BOOLEAN) return args.STRING1;
          else return args.STRING2;
      }
      ifthenelseboolean(args){
-         
+
          if(args.BOOLEAN) return args.VALUE1;
          else return args.VALUE2;
      }
      trueblock(){
-         
+
          return true;
      }
      falseblock(){
-         
+
          return false;
      }
      booleanblock(args){
-         
+
          if ('true'.localeCompare(args.BOOLEAN, undefined, { sensitivity: 'accent' }) === 0) return true;
          if ('false'.localeCompare(args.BOOLEAN, undefined, { sensitivity: 'accent' }) === 0) return false;
          return false;
      }
      text(args){
-         
+
          return args.STRING;
      }
      math(args){
-         
+
          if (args.MENU == 'add') return Number(args.NUMBER1) + Number(args.NUMBER2);
          if (args.MENU == 'subtract') return Number(args.NUMBER1) - Number(args.NUMBER2);
          if (args.MENU == 'multiply') return Number(args.NUMBER1) * Number(args.NUMBER2);
          if (args.MENU == 'divide') return Number(args.NUMBER1) / Number(args.NUMBER2);
      }
      numbersystemWithMenu(args){
-         
+
          return Number(args.NUMBER).toString(args.BASE);
      }
      numbersystem(args){
-         
+
          return Number(args.NUMBER).toString(args.BASE);
      }
      drawtext(args){
-         
+
          this.drawableId = this.runtime.renderer.createDrawable('pen');
          this.skinId = this.runtime.renderer.createSVGSkin('<svg height="20" width="100"><text x="' + args.X + '" y="' + args.Y * -1 + '" font-family="Helvetica">' + args.TEXT + '</text></svg>');
          this.runtime.renderer.updateDrawableProperties(this.drawableId, { skinId: this.skinId });
-         
+
          this.textDrawableIds[this.textDrawablesNextIndex] = this.drawableId;
          this.textSkinIds[this.textDrawablesNextIndex] = this.skinId;
          this.textDrawablesNextIndex++;
      }
      drawtext2(args){
-         
+
          const rgb = Cast.toRgbColorObject(args.COLOR);
          const color = '#' + (rgb.r <= 15? '0' + Number(rgb.r).toString(16) : Number(rgb.r).toString(16)) + (rgb.g <= 15? '0' + Number(rgb.g).toString(16) : Number(rgb.g).toString(16)) + (rgb.b <= 15? '0' + Number(rgb.b).toString(16) : Number(rgb.b).toString(16));
-         
+
          const drawableId = this.runtime.renderer.createDrawable('pen');
          const skinId = this.runtime.renderer.createSVGSkin('<svg height="20" width="100"><text x="' + args.X + '" y="' + args.Y * -1 + '" font-family="' + args.FONT + '" fill="' + color + '">' + args.TEXT + '</text></svg>');
          this.runtime.renderer.updateDrawableProperties(drawableId, { skinId: skinId });
-         
+
          this.textDrawableIds[this.textDrawablesNextIndex] = drawableId;
          this.textSkinIds[this.textDrawablesNextIndex] = skinId;
          this.textDrawablesNextIndex++;
      }
      cleartext(){
-         
+
          var runtime = this.runtime;
-         
+
          this.textSkinIds.forEach(function(item) {
-          
+
           runtime.renderer.destroySkin(item);
          });
          this.textDrawableIds.forEach(function(item) {
-          
+
           runtime.renderer.destroyDrawable(item, 'pen');
          });
          this.textSkinIds = [];
          this.textDrawableIds = [];
      }
      fill(args){
-         
+
          const rgb = Cast.toRgbColorObject(args.COLOR);
          const color = '#' + (rgb.r <= 15? '0' + Number(rgb.r).toString(16) : Number(rgb.r).toString(16)) + (rgb.g <= 15? '0' + Number(rgb.g).toString(16) : Number(rgb.g).toString(16)) + (rgb.b <= 15? '0' + Number(rgb.b).toString(16) : Number(rgb.b).toString(16));
-         
+
          if(this.fillDrawableId == undefined) {
              const drawableId = this.runtime.renderer.createDrawable('pen');
-             const skinId = this.runtime.renderer.createSVGSkin('<svg width="960" height="720"><rect x="-240" y="-180" width="960" height="720" fill="' + color + '"/></svg>');
+             const skinId = this.runtime.renderer.createSVGSkin('<svg width="960" height="720"><rect x="-240" y="-180" width="962" height="722" border-radius="$space" fill="' + color + '"/></svg>');
              this.runtime.renderer.updateDrawableProperties(drawableId, { skinId: skinId });
              this.runtime.renderer.setDrawableOrder(drawableId, 1, 'pen');
-             
+
              this.fillDrawableId = drawableId;
              this.fillSkinId = skinId;
          }
          else {
-             this.runtime.renderer.updateSVGSkin(this.fillSkinId, '<svg width="960" height="720"><rect x="-240" y="-180" width="960" height="720" fill="' + color + '"/></svg>');
+             this.runtime.renderer.updateSVGSkin(this.fillSkinId, '<svg width="960" height="720"><rect x="-240" y="-180" width="962" height="722" border-radius="$space" fill="' + color + '"/></svg>');
          }
      }
      clearfill(){
-         
+
          this.runtime.renderer.destroySkin(this.fillSkinId);
          this.runtime.renderer.destroyDrawable(this.fillDrawableId, 'pen');
-         
+
          this.fillSkinId = undefined;
          this.fillDrawableId = undefined;
      }
      isExactly(args){
-         
+
          return args.STRING1 == args.STRING2;
      }
      isBetween(args){
-         
+
          return Number(args.NUMBER) >= Number(args.NUMBER1) && Number(args.NUMBER) <= Number(args.NUMBER2);
      }
      smallerOrEqual(args){
-         
+
          return args.NUMBER1 <= args.NUMBER2;
      }
      greaterOrEqual(args){
-         
+
          return args.NUMBER1 >= args.NUMBER2;
      }
 }
 
 module.exports = Scratch3MS72Blocks;
-
